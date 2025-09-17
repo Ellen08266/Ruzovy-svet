@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Růžový svět • Příběhy, Reels & Život</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Růžový svět dvacetileté slečny — příběhy, fotky, reels, výlety, atletika, košíkářství a hudba." />
+</head>
+<body>
+  <!-- Pozadí se třpytkami -->
+  <div class="sparkles" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a class="logo" href="#hero">Růžový svět</a>
+      <button class="nav__toggle" aria-label="Otevřít menu">☰</button>
+      <ul class="nav__links">
+        <li><a href="#about">O mně</a></li>
+        <li><a href="#stories">Příběhy</a></li>
+        <li><a href="#gallery">Fotky</a></li>
+        <li><a href="#reels">Reels & Videa</a></li>
+        <li><a href="#hobbies">Koníčky</a></li>
+        <li><a href="#music">Hudba</a></li>
+        <li><a href="#contact" class="btn btn--small">Napiš mi</a></li>
+      </ul>
+    </nav>
+
+    <section id="hero" class="hero container">
+      <div class="hero__text">
+        <h1><span class="script">Ahoj!</span> Vítej v mém růžovém světě 🎀</h1>
+        <p>Jsem 20letá holka, co vidí svět růžově. Miluju výlety, atletiku, pletení proutěných košíků, občas něco uháčkuju a hlavně poslouchám hudbu (Ben Cristovao ♥). Tady sdílím svoje <strong>příběhy</strong>, <strong>reels</strong>, <strong>fotky</strong> a všechno, co mě baví.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#stories">Číst příběhy</a>
+          <a class="btn btn--ghost" href="#reels">Pustit video</a>
+        </div>
+      </div>
+      <div class="hero__media">
+        <img src="assets/hero-photo.jpg" alt="Slečna v růžové náladě" />
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <!-- O mně -->
+    <section id="about" class="section container">
+      <h2 class="section__title">O mně</h2>
+      <div class="card card--glass about">
+        <p>Ahoj! Jsem studentka, co se pořád hledá – a to je naprosto v pořádku. Tady si tvořím vlastní bublinu, kam si ukládám momenty, které chci mít u sebe. Pokud se ti tu líbí, zůstaň a napiš mi. 💌</p>
+        <ul class="about__stats">
+          <li>🎒 Studentka • 20 let</li>
+          <li>👟 Atletika & výlety</li>
+          <li>🧺 Košíkářka & háčkování</li>
+          <li>🎧 Ben Cristovao all day</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Příběhy (mini blog) -->
+    <section id="stories" class="section container">
+      <div class="section__head">
+        <h2 class="section__title">Příběhy</h2>
+        <button class="btn btn--small" id="newStoryBtn">+ Přidat příběh</button>
+      </div>
+      <div id="storiesList" class="grid cards">
+        <!-- JS dynamicky vloží příběhy (localStorage) -->
+      </div>
+
+      <!-- Modal pro nový příběh -->
+      <dialog id="storyModal" class="modal">
+        <form id="storyForm" method="dialog" class="modal__content">
+          <h3>Nový příběh</h3>
+          <label>Nadpis <input required name="title" placeholder="Můj krásný den"></label>
+          <label>Text <textarea required name="body" rows="6" placeholder="Co se stalo?"></textarea></label>
+          <div class="modal__actions">
+            <button class="btn" value="submit">Uložit</button>
+            <button class="btn btn--ghost" value="cancel">Zrušit</button>
+          </div>
+        </form>
+      </dialog>
+    </section>
+
+    <!-- Fotky (Lightbox galerie) -->
+    <section id="gallery" class="section container">
+      <div class="section__head">
+        <h2 class="section__title">Fotky</h2>
+        <p class="muted">Klikni pro zobrazení na celé obrazovce.</p>
+      </div>
+      <div class="grid gallery">
+        <!-- Nahraď svoje soubory -->
+        <img class="gallery__item" src="assets/gallery-1.jpg" alt="Výlet 1" />
+        <img class="gallery__item" src="assets/gallery-2.jpg" alt="Atletika 2" />
+        <img class="gallery__item" src="assets/gallery-3.jpg" alt="Košík 3" />
+        <img class="gallery__item" src="assets/gallery-4.jpg" alt="Smích 4" />
+        <img class="gallery__item" src="assets/gallery-5.jpg" alt="Kafe 5" />
+        <img class="gallery__item" src="assets/gallery-6.jpg" alt="Hudba 6" />
+      </div>
+
+      <!-- Lightbox -->
+      <dialog id="lightbox" class="lightbox" aria-label="Zvětšená fotka">
+        <img id="lightboxImg" alt="">
+        <button class="lightbox__close" aria-label="Zavřít">×</button>
+      </dialog>
+    </section>
+
+    <!-- Reels & Videa -->
+    <section id="reels" class="section container">
+      <div class="section__head">
+        <h2 class="section__title">Reels & Videa</h2>
+        <div class="reels__hint muted">
+          <span>Tip:</span> Můžeš vložit <code>&lt;video&gt;</code> soubor (MP4) nebo embed z Instagramu/TikToku/YouTube.
+        </div>
+      </div>
+
+      <div class="grid videos">
+        <!-- Lokální video (MP4) -->
+        <div class="video-card card">
+          <video controls preload="metadata" poster="assets/video-cover.jpg">
+            <source src="assets/sample.mp4" type="video/mp4" />
+            Tvůj prohlížeč nepodporuje HTML5 video.
+          </video>
+          <h3>Trénink na dráze</h3>
+          <p class="muted">Krátké sestřihy ze stadionu.</p>
+        </div>
+
+        <!-- YouTube embed (nahraď URL ID) -->
+        <div class="video-card card">
+          <div class="ratio ratio-16x9">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="YouTube video player"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+          </div>
+          <h3>Vlog z výletu</h3>
+          <p class="muted">Nejlepší růžové momenty.</p>
+        </div>
+
+        <!-- Instagram Reels (ukázka placeholder – vlož vlastní URL) -->
+        <div class="video-card card">
+          <div class="ratio ratio-9x16">
+            <iframe src="about:blank" title="Instagram Reel" loading="lazy"></iframe>
+          </div>
+          <h3>Reel: Košíkářský chill</h3>
+          <p class="muted">Ruce, proutí a hudba.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Koníčky -->
+    <section id="hobbies" class="section container">
+      <h2 class="section__title">Koníčky</h2>
+      <div class="grid hobbies">
+        <div class="card card--glass">
+          <h3>Atletika</h3>
+          <p>Miluju běh, sprinty i chill na tartanu. 🏃‍♀️</p>
+        </div>
+        <div class="card card--glass">
+          <h3>Košíkářství</h3>
+          <p>Ručně pletené proutěné košíky jsou moje terapie. 🧺</p>
+        </div>
+        <div class="card card--glass">
+          <h3>Háčkování</h3>
+          <p>Malé, roztomilé projekty, ideálně… růžové. 🧶</p>
+        </div>
+        <div class="card card--glass">
+          <h3>Výlety s přáteli</h3>
+          <p>Nová místa, káva, fotky a smích. 🌸</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hudba -->
+    <section id="music" class="section container">
+      <div class="section__head">
+        <h2 class="section__title">Hudba</h2>
+        <p class="muted">Tady bude moje playlist z oblíbených skladeb (Ben Cristovao 💗). Můžeš vložit Spotify/Apple Music embed.</p>
+      </div>
+      <div class="card">
+        <div class="ratio ratio-16x9">
+          <!-- Nahraď vlastní embed (Spotify „Sdílet > Vložit“): -->
+          <iframe src="about:blank" title="Hudební playlist" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
+    <section id="contact" class="section container">
+      <h2 class="section__title">Napiš mi</h2>
+      <form class="card card--glass contact" action="https://formspree.io/f/your-id" method="POST">
+        <label>Jméno <input required name="name" placeholder="Tvoje jméno"></label>
+        <label>E-mail <input required type="email" name="email" placeholder="tvoje@email.cz"></label>
+        <label>Zpráva <textarea required name="message" rows="5" placeholder="Ahoj…"></textarea></label>
+        <button class="btn">Odeslat</button>
+        <p class="muted tiny">* Formulář je demo – nahraď svůj Formspree ID.</p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> Růžový svět • Vše v lásce a růžové.</p>
+      <div class="footer__links">
+        <a href="#about">O mně</a>
+        <a href="#stories">Příběhy</a>
+        <a href="#contact">Kontakt</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

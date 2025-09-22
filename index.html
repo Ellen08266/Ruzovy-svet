@@ -73,20 +73,32 @@
       <dialog id="storyModal" class="modal">
         <form id="storyForm" method="dialog" class="modal__content">
           <h3>Nový příběh</h3>
-          <label>Nadpis <input required name="title" placeholder="Můj krásný den"></label>
-          <label>Text <textarea required name="body" rows="6" placeholder="Co se stalo?"></textarea></label>
+      
+          <label for="storyTitle">Nadpis</label>
+          <input id="storyTitle" required name="title" placeholder="Můj krásný den">
+      
+          <label for="storyBody">Text</label>
+          <textarea id="storyBody" required name="body" rows="6" placeholder="Co se stalo?"></textarea>
+      
           <div class="media-inputs">
-            <label>Fotka / Video
-              <input type="file" name="media" accept="image/*,video/*">
+            <label for="storyMedia">Fotka / Video</label>
+            <input id="storyMedia" type="file" name="media" accept="image/*,video/*">
+      
+            <label class="tiny muted" style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+              <input type="checkbox" id="removeMedia">
+              Odebrat aktuální médium
             </label>
+      
             <div id="mediaPreview" class="media-preview muted tiny">Žádné médium nevybráno.</div>
           </div>
+      
           <div class="modal__actions">
             <button class="btn" value="submit">Uložit</button>
             <button class="btn btn--ghost" value="cancel">Zrušit</button>
           </div>
         </form>
       </dialog>
+      
     </section>
 
     <section id="gallery" class="section container">
@@ -137,7 +149,7 @@
           <div class="ratio ratio-16x9">
             <video controls preload="metadata" poster="assets/video-cover.jpg">
               <!-- MP4 varianta (funguje skoro všude) -->
-              <source src="assets/Video_Kocka_Pes.mp4" type="video/mp4" />
+              <source src="assets/Laura_SkokDoVody.mp4" type="video/mp4" />
               <!-- WebM varianta (lepší komprese, Chrome/Firefox) -->
               <source src="assets/Video_Kocka_Pes.webm" type="video/webm" />
               Tvůj prohlížeč nepodporuje přehrávání videa.
@@ -230,12 +242,12 @@
 
     <section id="contact" class="section container">
       <h2 class="section__title">Napiš mi</h2>
-      <form class="card card--glass contact" action="https://formspree.io/f/your-id" method="POST">
+      <form class="card card--glass contact" action="https://formspree.io/f/xqayzwky" method="POST">
         <label>Jméno <input required name="name" placeholder="Tvoje jméno"></label>
         <label>E-mail <input required type="email" name="email" placeholder="tvoje@email.cz"></label>
         <label>Zpráva <textarea required name="message" rows="5" placeholder="Ahoj…"></textarea></label>
         <button class="btn">Odeslat</button>
-        <p class="muted tiny">* Nahraď svůj Formspree ID.</p>
+        <p class="muted tiny"><!-- * Nahraď svůj Formspree ID. --></p>
       </form>
     </section>
   </main>

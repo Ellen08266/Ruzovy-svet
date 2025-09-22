@@ -225,3 +225,69 @@ input:focus, textarea:focus{
     50%     { filter: brightness(1.15); }
   }
 }
+
+/* --- Příběhy: GRID rozložení --- */
+#storiesList {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 24px !important;
+  margin-top: 24px;
+}
+
+
+/* --- Příběhy: karta --- */
+#storiesList .story {
+  width: auto;             /* zruší případné 100% šířky z jiných stylů */
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+#storiesList .story:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(204, 50, 142, .25);
+}
+
+#storiesList .story h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: var(--pink-700);
+}
+
+#storiesList .story time {
+  font-size: .85rem;
+  color: var(--pink-500);
+  display: block;
+  margin-bottom: 12px;
+}
+
+#storiesList .story p {
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* --- Příběhy: média uvnitř karty --- */
+.story .story-media,
+#storiesList .story .story-media {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 420px;       /* aby fotka nezaplnila celý displej */
+  object-fit: cover;       /* ořízne, když je moc vysoká/široká */
+  border-radius: 12px;
+  border: 3px solid var(--pink-100);
+}
+
+
+.story {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

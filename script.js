@@ -1,4 +1,4 @@
-// === Růžový svět – Script v2 ===
+// === Růžový svět – Script v3 (stories s výměnou/odebráním média, filtr, lightbox) ===
 
 // Toggle mobilního menu
 const navToggle = document.querySelector('.nav__toggle');
@@ -8,7 +8,8 @@ if (navToggle) {
 }
 
 // Rok ve footeru
-document.getElementById('year').textContent = new Date().getFullYear();
+const yearEl = document.getElementById('year');
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 /* -------------------- Příběhy (localStorage + fotka/video) -------------------- */
 const storiesKey = 'pinkStories';
@@ -18,8 +19,9 @@ const storyModal = document.getElementById('storyModal');
 const storyForm = document.getElementById('storyForm');
 const mediaInput = storyForm?.querySelector('input[name="media"]');
 const mediaPreview = document.getElementById('mediaPreview');
+const removeMediaChk = document.getElementById('removeMedia'); // volitelný checkbox (může být null)
 
-// Seed demo stories on first visit
+// Jednorázový seed demo příběhů (pokud ještě nic není)
 (function seedStories(){
   try{
     const raw = localStorage.getItem(storiesKey);
@@ -43,9 +45,18 @@ function loadStories() {
   try { stories = raw ? JSON.parse(raw) : []; } catch { stories = []; }
   renderStories(stories);
 }
+
 function saveStories(stories) {
-  localStorage.setItem(storiesKey, JSON.stringify(stories));
+  try {
+    localStorage.setItem(storiesKey, JSON.stringify(stories));
+    return true;
+  } catch (e) {
+    console.error('Uložení selhalo', e);
+    alert('Uložení se nepovedlo – pravděpodobně je příliš velké médium. Zkus menší fotku/video.');
+    return false;
+  }
 }
+
 function renderStories(stories) {
   if (!storiesList) return;
   storiesList.innerHTML = '';
@@ -53,48 +64,57 @@ function renderStories(stories) {
     storiesList.innerHTML = `<div class="card"><p class="muted">Zatím tu není žádný příběh. Přidej první kliknutím na <strong>+ Přidat příběh</strong> 👍</p></div>`;
     return;
   }
-  stories.sort((a,b) => b.created - a.created).forEach((s) => {
-    const card = document.createElement('article');
-    card.className = 'card story';
-    const dateIso = new Date(s.created).toISOString();
-    const dateLabel = new Date(s.created).toLocaleDateString('cs-CZ', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  stories
+    .sort((a,b) => b.created - a.created)
+    .forEach((s) => {
+      const card = document.createElement('article');
+      card.className = 'card story';
+      const dateIso = new Date(s.created).toISOString();
+      const dateLabel = new Date(s.created).toLocaleDateString('cs-CZ', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
 
-    let mediaHtml = '';
-    if (s.media && s.media.src && s.media.kind === 'image') {
-      mediaHtml = `<img class="story-media" src="${s.media.src}" alt="">`;
-    } else if (s.media && s.media.src && s.media.kind === 'video') {
-      mediaHtml = `<video class="story-media" controls src="${s.media.src}"></video>`;
-    }
+      let mediaHtml = '';
+      if (s.media && s.media.src && s.media.kind === 'image') {
+        mediaHtml = `<img class="story-media" src="${s.media.src}" alt="">`;
+      } else if (s.media && s.media.src && s.media.kind === 'video') {
+        mediaHtml = `<video class="story-media" controls src="${s.media.src}"></video>`;
+      }
 
-    card.innerHTML = `
-      <h3>${escapeHtml(s.title)}</h3>
-      <time datetime="${dateIso}">${dateLabel}</time>
-      ${mediaHtml}
-      <p>${escapeHtml(s.body)}</p>
-      <div style="display:flex; gap:8px;">
-        <button class="btn btn--small" data-edit="${s.id}">Upravit</button>
-        <button class="btn btn--small btn--ghost" data-del="${s.id}">Smazat</button>
-      </div>
-    `;
-    storiesList.appendChild(card);
-  });
+      card.innerHTML = `
+        <h3>${escapeHtml(s.title)}</h3>
+        <time datetime="${dateIso}">${dateLabel}</time>
+        ${mediaHtml}
+        <p>${escapeHtml(s.body)}</p>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn--small" data-edit="${s.id}">Upravit</button>
+          <button class="btn btn--small btn--ghost" data-del="${s.id}">Smazat</button>
+        </div>
+      `;
+      storiesList.appendChild(card);
+    });
 }
 
-function escapeHtml(str){ return (str??'').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function escapeHtml(str){
+  return (str??'').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
 
+// Otevřít modal – nový příběh
 newStoryBtn?.addEventListener('click', () => {
   storyForm.reset();
   delete storyForm.dataset.editingId;
   if (mediaPreview) mediaPreview.textContent = 'Žádné médium nevybráno.';
+  if (mediaInput) mediaInput.value = '';
+  if (removeMediaChk) removeMediaChk.checked = false;
   storyModal.showModal();
 });
 
+// Náhled zvolené fotky/videa (jen textově)
 mediaInput?.addEventListener('change', () => {
   const file = mediaInput.files?.[0];
-  if (!file) { mediaPreview.textContent = 'Žádné médium nevybráno.'; return; }
-  mediaPreview.textContent = `Vybráno: ${file.name}`;
+  if (!file) { if (mediaPreview) mediaPreview.textContent = 'Žádné médium nevybráno.'; return; }
+  if (mediaPreview) mediaPreview.textContent = `Vybráno: ${file.name}`;
 });
 
+// Uložení (nový / editace)
 storyForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = new FormData(storyForm);
@@ -105,11 +125,17 @@ storyForm?.addEventListener('submit', async (e) => {
   const raw = localStorage.getItem(storiesKey);
   const stories = raw ? JSON.parse(raw) : [];
 
-  let media = null;
+  // Připrav médium – pokud je vybrán nový soubor
+  let newMedia = null;
   const file = mediaInput?.files?.[0];
   if (file) {
-    const src = await readFileAsDataURL(file);
-    media = { src, kind: file.type.startsWith('video') ? 'video' : 'image', name: file.name, type: file.type };
+    if (file.type.startsWith('image/')) {
+      // zmenšíme a uložíme jako JPEG pro menší velikost
+      newMedia = await resizeImageToDataURL(file, 1600, 0.8);
+    } else {
+      const src = await readFileAsDataURL(file);
+      newMedia = { src, kind: 'video', name: file.name, type: file.type };
+    }
   }
 
   const editingId = storyForm.dataset.editingId;
@@ -118,28 +144,29 @@ storyForm?.addEventListener('submit', async (e) => {
     if (idx > -1) {
       stories[idx].title = title;
       stories[idx].body = body;
-      if (media) stories[idx].media = media;
+
+      if (removeMediaChk?.checked) {
+        // výslovně odebrat
+        delete stories[idx].media;
+      } else if (newMedia) {
+        // nahradit novým
+        stories[idx].media = newMedia;
+      }
+      // jinak ponecháme původní médium beze změny
     }
     delete storyForm.dataset.editingId;
   } else {
-    stories.push({ id: crypto.randomUUID(), title, body, created: Date.now(), media });
+    stories.push({ id: crypto.randomUUID(), title, body, created: Date.now(), media: newMedia });
   }
 
-  saveStories(stories);
+  if (!saveStories(stories)) return; // selhalo uložení (např. moc velký soubor)
+
   loadStories();
   storyForm.reset();
   if (mediaPreview) mediaPreview.textContent = 'Žádné médium nevybráno.';
+  if (removeMediaChk) removeMediaChk.checked = false;
   storyModal.close();
 });
-
-function readFileAsDataURL(file){
-  return new Promise((res, rej) => {
-    const reader = new FileReader();
-    reader.onload = () => res(reader.result);
-    reader.onerror = rej;
-    reader.readAsDataURL(file);
-  });
-}
 
 // Edit/Smazat
 storiesList?.addEventListener('click', (e) => {
@@ -153,18 +180,53 @@ storiesList?.addEventListener('click', (e) => {
     if (!item) return;
     storyForm.title.value = item.title ?? '';
     storyForm.body.value = item.body ?? '';
-    if (mediaPreview) mediaPreview.textContent = item.media?.name ? `Aktuální: ${item.media.name}` : 'Žádné médium neuloženo.';
+    if (mediaPreview) mediaPreview.textContent = item.media?.name ? `Aktuální: ${item.media.name}` : (item.media?.src ? 'Uloženo médium (bez názvu)' : 'Žádné médium neuloženo.');
+    if (mediaInput) mediaInput.value = ''; // vyčistit, aby šlo zvolit stejný název souboru znovu
+    if (removeMediaChk) removeMediaChk.checked = false;
     storyForm.dataset.editingId = editId;
     storyModal.showModal();
   }
   if (delId) {
     const filtered = stories.filter(s => s.id !== delId);
-    saveStories(filtered);
+    if (!saveStories(filtered)) return;
     loadStories();
   }
 });
 
 loadStories();
+
+/* ---- Pomocné funkce pro práci se soubory ---- */
+function readFileAsDataURL(file){
+  return new Promise((res, rej) => {
+    const reader = new FileReader();
+    reader.onload = () => res(reader.result);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function resizeImageToDataURL(file, maxSize = 1600, quality = 0.8) {
+  const dataURL = await readFileAsDataURL(file);
+  const img = await new Promise((res, rej) => {
+    const i = new Image();
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = dataURL;
+  });
+  const { width, height } = img;
+  const scale = Math.min(1, maxSize / Math.max(width, height));
+  const w = Math.round(width * scale);
+  const h = Math.round(height * scale);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+
+  // export jako JPEG (menší velikost, kvalitní pro web)
+  const out = canvas.toDataURL('image/jpeg', quality);
+  return { src: out, kind: 'image', name: file.name, type: 'image/jpeg' };
+}
 
 /* -------------------- Lightbox galerie -------------------- */
 const galleryImgs = document.querySelectorAll('.gallery__item');
@@ -174,11 +236,12 @@ const lightboxClose = document.querySelector('.lightbox__close');
 
 galleryImgs.forEach(img => {
   img.addEventListener('click', () => {
+    if (!lightboxImg || !lightbox) return;
     lightboxImg.src = img.src;
     lightbox.showModal();
   });
 });
-lightboxClose?.addEventListener('click', () => lightbox.close());
+lightboxClose?.addEventListener('click', () => lightbox?.close());
 lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.close(); });
 
 /* -------------------- FILTR galerie -------------------- */
@@ -191,7 +254,7 @@ filterBtns.forEach(btn => {
     filterBtns.forEach(b => b.classList.remove('is-active'));
     btn.classList.add('is-active');
 
-    const items = galleryGrid.querySelectorAll('.gallery__item');
+    const items = galleryGrid?.querySelectorAll('.gallery__item') ?? [];
     items.forEach(el => {
       const cat = el.dataset.cat;
       const match = (target === 'all') || (cat === target);

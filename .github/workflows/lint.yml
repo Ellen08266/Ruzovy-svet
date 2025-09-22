@@ -1,0 +1,25 @@
+name: Super Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Super-Linter zkontroluje HTML, CSS i JS bez další konfigurace
+      - name: Run Super-Linter
+        uses: github/super-linter@v6
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Níže můžeš vypnout věci, které nepoužíváš:
+          VALIDATE_MARKDOWN: false
+          VALIDATE_YAML: false
+          VALIDATE_PYTHON: false
+          VALIDATE_TYPESCRIPT_ES: false

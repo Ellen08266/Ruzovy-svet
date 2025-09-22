@@ -9,17 +9,31 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repo (full history)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # Super-Linter zkontroluje HTML, CSS i JS bez další konfigurace
+      # Slim varianta je rychlejší a bohatě stačí pro HTML/CSS/JS
       - name: Run Super-Linter
-        uses: github/super-linter@v6
+        uses: super-linter/super-linter/slim@v6
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Níže můžeš vypnout věci, které nepoužíváš:
+          VALIDATE_ALL_CODEBASE: true
+
+          # Povolíme jen to, co potřebuješ:
+          VALIDATE_HTML: true
+          VALIDATE_CSS: true
+          VALIDATE_JAVASCRIPT_ES: true
+
+          # Všechno ostatní explicitně vypneme:
           VALIDATE_MARKDOWN: false
           VALIDATE_YAML: false
+          VALIDATE_JSON: false
           VALIDATE_PYTHON: false
           VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_GITHUB_ACTIONS: false
+
+          # Vynecháme binárky v assets (obrázky, videa):
+          FILTER_REGEX_EXCLUDE: "^(assets/|.*/assets/).*"

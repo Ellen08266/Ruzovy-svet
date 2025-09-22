@@ -1,3 +1,5 @@
+// === Růžový svět – Script v2 ===
+
 // Toggle mobilního menu
 const navToggle = document.querySelector('.nav__toggle');
 const navLinks = document.querySelector('.nav__links');
@@ -17,6 +19,24 @@ const storyForm = document.getElementById('storyForm');
 const mediaInput = storyForm?.querySelector('input[name="media"]');
 const mediaPreview = document.getElementById('mediaPreview');
 
+// Seed demo stories on first visit
+(function seedStories(){
+  try{
+    const raw = localStorage.getItem(storiesKey);
+    if (!raw) {
+      const demo = [
+        { id: crypto.randomUUID(), title: "Růžový běh v parku", body: "Dneska lehký trénink a pak frappé s holkama. Slunce, smích a pohoda!",
+          created: Date.now()-1000*60*60*24*3, media: {src:"assets/gallery-2.jpg", kind:"image", name:"atletika.jpg", type:"image/jpeg"} },
+        { id: crypto.randomUUID(), title: "Košíkářský chill", body: "Nový malý košík z proutí – růžová mašle!",
+          created: Date.now()-1000*60*60*36, media: {src:"assets/gallery-3.jpg", kind:"image", name:"kosik.jpg", type:"image/jpeg"} },
+        { id: crypto.randomUUID(), title: "Víkendový výlet", body: "Objevily jsme kavárnu s nejlepším cheesecakem. 10/10.",
+          created: Date.now()-1000*60*60*6, media: {src:"assets/gallery-1.jpg", kind:"image", name:"vylety.jpg", type:"image/jpeg"} },
+      ];
+      localStorage.setItem(storiesKey, JSON.stringify(demo));
+    }
+  }catch(e){ /* ignore */ }
+})();
+
 function loadStories() {
   const raw = localStorage.getItem(storiesKey);
   let stories = [];
@@ -27,6 +47,7 @@ function saveStories(stories) {
   localStorage.setItem(storiesKey, JSON.stringify(stories));
 }
 function renderStories(stories) {
+  if (!storiesList) return;
   storiesList.innerHTML = '';
   if (!stories.length) {
     storiesList.innerHTML = `<div class="card"><p class="muted">Zatím tu není žádný příběh. Přidej první kliknutím na <strong>+ Přidat příběh</strong> 👍</p></div>`;
@@ -61,7 +82,6 @@ function renderStories(stories) {
 
 function escapeHtml(str){ return (str??'').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-// Otevřít modal
 newStoryBtn?.addEventListener('click', () => {
   storyForm.reset();
   delete storyForm.dataset.editingId;
@@ -69,14 +89,12 @@ newStoryBtn?.addEventListener('click', () => {
   storyModal.showModal();
 });
 
-// Náhled média (fotka/video) před uložením
 mediaInput?.addEventListener('change', () => {
   const file = mediaInput.files?.[0];
   if (!file) { mediaPreview.textContent = 'Žádné médium nevybráno.'; return; }
   mediaPreview.textContent = `Vybráno: ${file.name}`;
 });
 
-// Submit příběhu
 storyForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = new FormData(storyForm);
@@ -87,7 +105,6 @@ storyForm?.addEventListener('submit', async (e) => {
   const raw = localStorage.getItem(storiesKey);
   const stories = raw ? JSON.parse(raw) : [];
 
-  // Přečíst případný soubor jako DataURL (DEMO)
   let media = null;
   const file = mediaInput?.files?.[0];
   if (file) {

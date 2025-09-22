@@ -30,14 +30,14 @@
     <section id="hero" class="hero container">
       <div class="hero__text">
         <h1><span class="script">Ahoj!</span> Vítej v mém růžovém světě 🎀</h1>
-        <p>Jsem 20letá holka… sdílím svoje <strong>příběhy</strong>, <strong>reels</strong>, <strong>fotky</strong> a všechno, co mě baví.</p>
+        <p>Jsem 20letá holka, co vidí svět růžově. Miluju výlety, atletiku, proutěné košíky, háčkování a hlavně hudbu (Ben Cristovao ♥). Tady sdílím svoje <strong>příběhy</strong>, <strong>reels</strong>, <strong>fotky</strong> a všechno, co mě baví.</p>
         <div class="hero__cta">
           <a class="btn" href="#stories">Číst příběhy</a>
           <a class="btn btn--ghost" href="#reels">Pustit video</a>
         </div>
       </div>
       <div class="hero__media">
-        <img src="assets/hero-photo.jpg" alt="Slečna v růžové náladě" />
+        <img src="assets/Laura_1.jpeg" alt="Slečna v růžové náladě" />
       </div>
     </section>
   </header>
@@ -46,7 +46,7 @@
     <section id="about" class="section container">
       <h2 class="section__title">O mně</h2>
       <div class="card card--glass about">
-        <p>Ahoj! Jsem studentka… 💌</p>
+        <p>Ahoj! Jsem studentka, co se pořád hledá – a to je naprosto v pořádku. Tady si tvořím vlastní bublinu, kam si ukládám momenty, které chci mít u sebe. Pokud se ti tu líbí, zůstaň a napiš mi. 💌</p>
         <ul class="about__stats">
           <li>🎒 Studentka • 20 let</li>
           <li>👟 Atletika & výlety</li>
@@ -56,7 +56,6 @@
       </div>
     </section>
 
-    <!-- Příběhy s možností přidat fotku/video -->
     <section id="stories" class="section container">
       <div class="section__head">
         <h2 class="section__title">Příběhy</h2>
@@ -70,8 +69,7 @@
           <label>Nadpis <input required name="title" placeholder="Můj krásný den"></label>
           <label>Text <textarea required name="body" rows="6" placeholder="Co se stalo?"></textarea></label>
           <div class="media-inputs">
-            <label>
-              Fotka / Video
+            <label>Fotka / Video
               <input type="file" name="media" accept="image/*,video/*">
             </label>
             <div id="mediaPreview" class="media-preview muted tiny">Žádné médium nevybráno.</div>
@@ -84,7 +82,6 @@
       </dialog>
     </section>
 
-    <!-- Fotogalerie s FILTREM -->
     <section id="gallery" class="section container">
       <div class="section__head">
         <h2 class="section__title">Fotky</h2>
@@ -99,13 +96,18 @@
       </div>
 
       <div class="grid gallery" id="galleryGrid">
-        <!-- Přidej/nahraď vlastní soubory a kategorie v data-cat -->
-        <img class="gallery__item" src="assets/gallery-1.jpg" alt="Výlet 1" data-cat="vylety" />
-        <img class="gallery__item" src="assets/gallery-2.jpg" alt="Atletika 2" data-cat="atletika" />
-        <img class="gallery__item" src="assets/gallery-3.jpg" alt="Košík 3" data-cat="kosiky" />
-        <img class="gallery__item" src="assets/gallery-4.jpg" alt="Smích 4" data-cat="vylety" />
-        <img class="gallery__item" src="assets/gallery-5.jpg" alt="Kafe 5" data-cat="hudba" />
-        <img class="gallery__item" src="assets/gallery-6.jpg" alt="Háčkování 6" data-cat="hackovani" />
+        <img class="gallery__item" src="assets/Laura_2.jpeg" alt="Atletika 1" data-cat="atletika"/>
+        <img class="gallery__item" src="assets/Ben_2.jpeg" alt="Hudba 2" data-cat="hudba"/>
+        <img class="gallery__item" src="assets/gallery-3.jpg" alt="Atletika 3" data-cat="atletika"/>
+        <img class="gallery__item" src="assets/gallery-4.jpg" alt="Atletika 4" data-cat="atletika"/>
+        <img class="gallery__item" src="assets/gallery-5.jpg" alt="Košíky 5" data-cat="kosiky"/>
+        <img class="gallery__item" src="assets/Vylet.jpeg" alt="Výlety 6" data-cat="vylety"/>
+        <img class="gallery__item" src="assets/gallery-7.jpg" alt="Háčkování 7" data-cat="hackovani"/>
+        <img class="gallery__item" src="assets/gallery-8.jpg" alt="Košíky 8" data-cat="kosiky"/>
+        <img class="gallery__item" src="assets/gallery-9.jpg" alt="Háčkování 9" data-cat="hackovani"/>
+        <img class="gallery__item" src="assets/gallery-10.jpg" alt="Košíky 10" data-cat="kosiky"/>
+        <img class="gallery__item" src="assets/Kosiky_1.jpeg" alt="Košíky 11" data-cat="kosiky"/>
+        <img class="gallery__item" src="assets/gallery-12.jpg" alt="Háčkování 12" data-cat="hackovani"/>
       </div>
 
       <dialog id="lightbox" class="lightbox" aria-label="Zvětšená fotka">
@@ -119,18 +121,21 @@
         <h2 class="section__title">Reels & Videa</h2>
         <div class="reels__hint muted"><span>Tip:</span> Můžeš vložit MP4 nebo embed.</div>
       </div>
-
       <div class="grid videos">
         <div class="video-card card">
-          <video controls preload="metadata" poster="assets/video-cover.jpg">
-            <source src="assets/sample.mp4" type="video/mp4" />
-          </video>
+          <div class="ratio ratio-16x9">
+            <video controls preload="metadata" poster="assets/video-cover.jpg">
+              <!-- Nahraď assets/sample.mp4 vlastním videem -->
+              <source src="" type="video/mp4" />
+            </video>
+          </div>
           <h3>Trénink na dráze</h3>
           <p class="muted">Krátké sestřihy ze stadionu.</p>
         </div>
         <div class="video-card card">
           <div class="ratio ratio-16x9">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <h3>Vlog z výletu</h3>
           <p class="muted">Nejlepší růžové momenty.</p>

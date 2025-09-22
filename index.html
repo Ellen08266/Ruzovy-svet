@@ -130,19 +130,23 @@
     <section id="reels" class="section container">
       <div class="section__head">
         <h2 class="section__title">Reels & Videa</h2>
-        <div class="reels__hint muted"><span>Tip:</span> Můžeš vložit MP4 nebo embed.</div>
+        <div class="reels__hint muted"><!-- <span>Tip:</span>  Můžeš vložit MP4 nebo embed. --></div>
       </div>
       <div class="grid videos">
         <div class="video-card card">
           <div class="ratio ratio-16x9">
-            <video controls preload="metadata" poster="assets/Viedo_Kocka_Pes.mp4">
-              <!-- Nahraď assets/sample.mp4 vlastním videem -->
-              <source src="" type="video/mp4" />
+            <video controls preload="metadata" poster="assets/video-cover.jpg">
+              <!-- MP4 varianta (funguje skoro všude) -->
+              <source src="assets/Video_Kocka_Pes.mp4" type="video/mp4" />
+              <!-- WebM varianta (lepší komprese, Chrome/Firefox) -->
+              <source src="assets/Video_Kocka_Pes.webm" type="video/webm" />
+              Tvůj prohlížeč nepodporuje přehrávání videa.
             </video>
           </div>
           <h3>Trénink na dráze</h3>
           <p class="muted">Krátké sestřihy ze stadionu.</p>
         </div>
+        
         <div class="video-card card">
           <div class="ratio ratio-9x16">
             <iframe src="https://www.youtube.com/embed/i5JUQY8nglk?rel=0&modestbranding=1&playsinline=1"

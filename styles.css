@@ -291,3 +291,102 @@ input:focus, textarea:focus{
     transform: translateY(0);
   }
 }
+/* === PRODEJ / SHOP SEKCE === */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.shop-card {
+  position: relative;
+  border: 2px solid var(--pink-200);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(204, 50, 142, .25);
+}
+
+.shop-media {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 3px solid var(--pink-100);
+  box-shadow: var(--shadow);
+}
+
+.shop-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 240px;        /* fotka se nezvětší přes čumák */
+  object-fit: cover;
+}
+
+.price-badge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: linear-gradient(135deg, var(--pink-500), var(--pink-700));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  line-height: 1;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(204, 50, 142, .35);
+  border: 2px solid var(--pink-100);
+}
+
+.shop-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pink-800);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.shop-desc {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.shop-meta {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.shop-btn {
+  align-self: flex-start;
+  background: linear-gradient(135deg, var(--pink-500), var(--pink-700));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(204, 50, 142, .25);
+}
+
+.shop-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.shop-note {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1.4;
+}
